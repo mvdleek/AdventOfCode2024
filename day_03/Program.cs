@@ -32,7 +32,6 @@
             // 790 x mul(
             // 39 x do()
             // 31 x don't()
-            var sl = new List<string>();
             var sentinel = "$$$$$$$$$$$$$";
             //var input = File.ReadAllText("input_example_p2.txt")! + sentinel;
             //var input = File.ReadAllText("input2.txt")! + sentinel;
@@ -40,11 +39,9 @@
             var input_len = input.Length - sentinel.Length;
             long total = 0;
             var startIndex = 0;
-            var mulCount = 0;
-            var doCount = 0;
-            var dontCount = 0;
             var doing = true;
             var enablePart2 = true;
+
             while (startIndex < input_len)
             {
                 var i = input.IndexOf("mul(", startIndex);
@@ -60,22 +57,15 @@
                         if (i_do > i_dont)
                         {
                             doing = true;
-                            sl.Add("do");
-                            doCount++;
-
                         }
                         else
                         {
                             doing = false;
-                            sl.Add("dont");
-                            dontCount++;
                         }
                     }
                 }
 
                 var start = i;
-                mulCount++;
-                var found = false;
                 i += 4;
                 var x = ReadNumber(input, ref i);
                 if (x != null)
@@ -94,29 +84,15 @@
                                 {
                                     total += x.Value * y.Value;
                                 }
-                                Console.WriteLine($"mul({x.Value},{y.Value})");
-                                var t = input.Substring(start, 1 + (i - start) + 2);
-                                sl.Add($"mul({x.Value},{y.Value})   from [{t}]");
-                                found = true;
                             }
                         }
                     }
-                }
-                if (!found)
-                {
-                    var s = input.Substring(start, 15);
-                    Console.WriteLine($"NOT: {s})");
-                    sl.Add($"NOT: {s})");
                 }
 
                 startIndex = i;
             }
 
-            Console.WriteLine($"MulCount: {mulCount}");
-            Console.WriteLine($"DoCount: {doCount}");
-            Console.WriteLine($"DontCount: {dontCount}");
             Console.WriteLine($"Total: {total}");
-            File.WriteAllLines("c:\\temp\\out.txt", sl);
             // 192435729 via copy & past naar input.txt
             // 192767529 via edge, save as naar input_dl.txt
             // 192767529 via edge, copy paste input2.txt
