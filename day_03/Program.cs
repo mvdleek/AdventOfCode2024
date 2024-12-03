@@ -1,5 +1,4 @@
-﻿
-namespace day_03
+﻿namespace day_03
 {
     internal class Program
     {
@@ -29,22 +28,52 @@ namespace day_03
             //NOT: mul(132,913!%fr)
             //NOT: mul(884,988when)
             //NOT: mul(88,163^%sel)
-            //NOT: mul(600,55s3)fr)
+            //NOT: mul(600,55s3)fr) <----- THISSSSSS
             // 790 x mul(
+            // 39 x do()
+            // 31 x don't()
             var sl = new List<string>();
             var sentinel = "$$$$$$$$$$$$$";
-            var input = File.ReadAllText("input.txt")! + sentinel;
-            //var input = File.ReadAllText("c:\\temp\\input_dl.txt")! + sentinel;
+            //var input = File.ReadAllText("input_example_p2.txt")! + sentinel;
+            //var input = File.ReadAllText("input2.txt")! + sentinel;
+            var input = File.ReadAllText("c:\\temp\\input_dl.txt")! + sentinel;
             var input_len = input.Length - sentinel.Length;
             long total = 0;
             var startIndex = 0;
             var mulCount = 0;
+            var doCount = 0;
+            var dontCount = 0;
+            var doing = true;
+            var enablePart2 = true;
             while (startIndex < input_len)
             {
-
                 var i = input.IndexOf("mul(", startIndex);
-                var start = i;
                 if (i == -1) { break; }
+
+                if (enablePart2)
+                {
+                    var i_do = input.LastIndexOf("do()", i, 1 + (i - startIndex));
+                    var i_dont = input.LastIndexOf("don't()", i, 1 + (i - startIndex));
+
+                    if (i_do != -1 || i_dont != -1)
+                    {
+                        if (i_do > i_dont)
+                        {
+                            doing = true;
+                            sl.Add("do");
+                            doCount++;
+
+                        }
+                        else
+                        {
+                            doing = false;
+                            sl.Add("dont");
+                            dontCount++;
+                        }
+                    }
+                }
+
+                var start = i;
                 mulCount++;
                 var found = false;
                 i += 4;
@@ -61,7 +90,10 @@ namespace day_03
                             {
                                 // uncorrupted instruction found
                                 i++;
-                                total += x.Value * y.Value;
+                                if (doing)
+                                {
+                                    total += x.Value * y.Value;
+                                }
                                 Console.WriteLine($"mul({x.Value},{y.Value})");
                                 var t = input.Substring(start, 1 + (i - start) + 2);
                                 sl.Add($"mul({x.Value},{y.Value})   from [{t}]");
@@ -75,19 +107,25 @@ namespace day_03
                     var s = input.Substring(start, 15);
                     Console.WriteLine($"NOT: {s})");
                     sl.Add($"NOT: {s})");
-
                 }
 
                 startIndex = i;
             }
 
             Console.WriteLine($"MulCount: {mulCount}");
+            Console.WriteLine($"DoCount: {doCount}");
+            Console.WriteLine($"DontCount: {dontCount}");
             Console.WriteLine($"Total: {total}");
             File.WriteAllLines("c:\\temp\\out.txt", sl);
             // 192435729 via copy & past naar input.txt
             // 192767529 via edge, save as naar input_dl.txt
             // 192767529 via edge, copy paste input2.txt
             // 192767529 via copy & past naar input.txt   --> accidental s inserted because of mac keyboard i pressed fn+s thinking it was ctrl+s
+
+            // part 2:
+            // 101636318 -- zucht foute input file gebruikt :-(
+            // 101636318 -- grrrrrrr
+            // 104083373 -- lastindex count toch 1 + (i - startindex)
         }
 
         private static int? ReadNumber(string input, ref int i)
