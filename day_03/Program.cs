@@ -87,6 +87,7 @@ namespace day_03
             // 192435729 via copy & past naar input.txt
             // 192767529 via edge, save as naar input_dl.txt
             // 192767529 via edge, copy paste input2.txt
+            // 192767529 via copy & past naar input.txt   --> accidental s inserted because of mac keyboard i pressed fn+s thinking it was ctrl+s
         }
 
         private static int? ReadNumber(string input, ref int i)
