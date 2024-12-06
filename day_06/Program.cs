@@ -1,5 +1,7 @@
 ﻿
 
+using System.Diagnostics;
+
 namespace day_06
 {
     internal class Program
@@ -15,6 +17,9 @@ namespace day_06
         //    used ^ instead of &
         static void Main(string[] args)
         {
+            var sw = new Stopwatch();
+            sw.Start();
+
             //var filename = "input_example.txt"; // 41  only 1 bug 'OldY=CurrentX' p2=6
             var filename = "input.txt"; // 4778 2nd time right   only 1 bug 'OldY=CurrentX'  p2=1618
 
@@ -30,7 +35,6 @@ namespace day_06
             var visitedPositionsInPart1 = gridP1.GetListOfVisitedPositions();
             var gridP2 = ReadInputP2(filename);
 
-            var checkcount = 0;
             var obstructionPositionCount = 0;
             foreach (var visitedPosition in visitedPositionsInPart1)
             {
@@ -46,10 +50,9 @@ namespace day_06
                 {
                     obstructionPositionCount++;
                 }
-
-                Console.WriteLine($"Checked: {++checkcount}");
             }
-
+            sw.Stop();
+            Console.WriteLine($"Elapsed: {sw.ElapsedMilliseconds}");
             Console.WriteLine($"Different obstruction positions: {obstructionPositionCount}");
         }
 
