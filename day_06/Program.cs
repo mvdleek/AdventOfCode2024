@@ -95,8 +95,16 @@ namespace day_06
     //       | 
     //      #B----<
     //       
+    //   in part 2 if start is like this:
     //
+    //   #^#
+    //    #
     //
+    //   will it be ok in part 2 if you get like this
+    //
+    //    O
+    //   #^#
+    //    #
 
     class GridP1
     {
