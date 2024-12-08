@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace day_08
+﻿namespace day_08
 {
     // start @ 1030
     // time finished coding proposed solution (without debugging) .. 1130 (tentatively)
