@@ -1,6 +1,7 @@
 ﻿
 
 using System.Diagnostics;
+using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace day_11
@@ -14,51 +15,48 @@ namespace day_11
     // @0740 p2 coding finished
     // @0748 p2 from list to array
     //
+    // @2115 start again
+    // input na 25x = 200446, 478 unieke op level 25 !!
+    // @2330  ppffft 238317474993392 -- te lang geneuzeld met brute forcen voordat ik maar eens ging kijken hoeveel unieke waarden langskwamen, dat was zeer beperkt!
     internal class Program
     {
-        static long maxValue = 0;
+        class Stone
+        {
+            public long value;
+            public long occurence;
 
+            public Stone(long v, long o)
+            {
+                value = v;
+                occurence = o;
+            }
+        }
 
         static void Main(string[] args)
         {
-            // diepte 50 = 4 minuten 6_900_581_362
-            // diepte 55 = 
-
-            var stoneList = File.ReadAllLines("input.txt")[0].Split(' ').Select(x => long.Parse(x)).ToArray();  // 200446
-            //var stoneList = new List<long>(10_000_000); //optimization 1: allocate memory 1 time for the list, no expensive memory realloctions needed
-            //var stoneList = new long[2_000_000_000];
-            //var stoneListCount = input.Length;
-            //for (int i = 0; i < input.Length; i++)
-            //{
-            //    stoneList[i] = input[i];
-            //}
+            var input = File.ReadAllLines("input.txt")[0].Split(' ').Select(x => new Stone(long.Parse(x), 1)).ToArray();  // p1=200446, p2: 238317474993392
+            var stoneList = new Stone[10_000_000];
+            var stoneListCount = input.Length;
+            for (int i = 0; i < input.Length; i++)
+            {
+                stoneList[i] = input[i];
+            }
 
             var sw = new Stopwatch();
             sw.Start();
-            long stoneCount = 0;
 
-            Parallel.ForEach(
-                     stoneList,                         // source collection
-                     () => (long)0,                           // thread local initializer
-                     (n, loopState, localSum) =>        // body
-                     {
-                             localSum += GetStoneCountFromValue(n, 55);
+            for (var i = 0; i < 75; i++)
+            {
+                Blink(stoneList, ref stoneListCount);
 
-                         //localSum += n;
-                         Console.WriteLine("Thread={0}, n={1}, localSum={2}", Thread.CurrentThread.ManagedThreadId, n, localSum);
-                         return localSum;
-                     },
-                     (localSum) => Interlocked.Add(ref stoneCount, localSum)                   // thread local aggregator
-                 );
+                Compact(stoneList, ref stoneListCount);
 
-            //for (int i = 0; i < stoneList.Length; i++)
-            //{
-            //    stoneCount += GetStoneCountFromValue(stoneList[i], 25);
-            //}
+                Console.WriteLine($"stones after blink {i + 1} = {GetStoneCount(stoneList, stoneListCount)}");
+            }
             sw.Stop();
 
-            Console.WriteLine($"Number of stones: {stoneCount}");
             Console.WriteLine($"Duration = {sw.Elapsed}");
+            Console.WriteLine($"Number of stones: {GetStoneCount(stoneList, stoneListCount)}");
         }
 
 
@@ -66,7 +64,6 @@ namespace day_11
         {
             if (depth == 0) 
             { 
-                
                 return 1; 
             }
 
@@ -94,30 +91,47 @@ namespace day_11
             return GetStoneCountFromValue(stoneValue * 2024, depth - 1);
         }
 
-        static void MainPart1(string[] args)
+        private static long GetStoneCount(Stone[] stoneList, int stoneListCount)
         {
-            
-
-            var input = File.ReadAllLines("input_example.txt")[0].Split(' ').Select(x => long.Parse(x)).ToArray();  // 200446
-            //var stoneList = new List<long>(10_000_000); //optimization 1: allocate memory 1 time for the list, no expensive memory realloctions needed
-            var stoneList = new long[2_000_000_000];
-            var stoneListCount = input.Length;
-            for (int i = 0; i < input.Length; i++)
+            long count = 0;
+            for (int j = 0; j < stoneListCount; j++)
             {
-                stoneList[i] = input[i];
+                count += stoneList[j].occurence;
             }
-
-            for (var i = 0; i < 25; i++)
-            {
-                Blink(stoneList, ref stoneListCount);
-                Console.WriteLine($"stones after blink { i+1 } = { stoneListCount }");
-                Console.WriteLine($"max after blink { i+1 } = { maxValue }");
-            }
-
-            Console.WriteLine($"Number of stones: { stoneListCount }");
+            return count;
         }
 
-        private static void Blink(long[] stoneList, ref int stoneListCount)
+        private static void Compact(Stone[] stoneList, ref int stoneListCount)
+        {
+            var dict = new Dictionary<long, Stone>();
+            for (int j = 0; j < stoneListCount; j++)
+            {
+                var stone = stoneList[j];
+                if (!dict.ContainsKey(stone.value))
+                {
+                    dict.Add(stone.value, stone);
+                }
+                else
+                {
+                    dict[stone.value].occurence += stone.occurence;
+                }
+            }
+            Console.WriteLine($"Unique values: {dict.Count}");
+
+            for (int i = 0; i < stoneListCount; i++)
+            {
+                stoneList[i] = null!;
+            }
+
+            stoneListCount = 0;
+            foreach (var item in dict)
+            {
+                stoneList[stoneListCount] = item.Value;
+                stoneListCount++;
+            }
+        }
+
+        private static void Blink(Stone[] stoneList, ref int stoneListCount)
         {
             // optimization ideas: 
             // 1) walk 1 time counting number of splits that will happen   
@@ -138,13 +152,13 @@ namespace day_11
             stoneListCount = newStoneListCount;
         }
 
-        private static int GetNumberOfSplitsThatWillHappen(long[] stoneList, int stoneListCount)
+        private static int GetNumberOfSplitsThatWillHappen(Stone[] stoneList, int stoneListCount)
         {
             var splitCount = 0;
 
             for (int stoneIndex = 0; stoneIndex < stoneListCount; stoneIndex++)
             {
-                var stoneValue = stoneList[stoneIndex];
+                var stoneValue = stoneList[stoneIndex].value;
 
                 if (stoneValue == 0) { continue; }
 
@@ -159,40 +173,38 @@ namespace day_11
             return splitCount;
         }
 
-        private static int ApplyRule(long[] stoneList, int stoneIndex, int stoneWriteIndex)
+        private static int ApplyRule(Stone[] stoneList, int stoneIndex, int stoneWriteIndex)
         {
-            var stoneValue = stoneList[stoneIndex];
+            var stone = stoneList[stoneIndex];
 
             //rule 1: If the stone is engraved with the number 0, it is replaced by a stone engraved with the number 1.
-            if (stoneValue == 0)
+            if (stone.value == 0)
             {
-                stoneList[stoneWriteIndex] = 1;
+                stoneList[stoneWriteIndex] = stone;
+                stone.value = 1;
                 return 1; // stoneswritten
             }
 
             //rule 2: If the stone is engraved with a number that has an even number of digits, it is replaced by two stones. The left half of the digits are engraved on the new left stone, and the right half of the digits are engraved on the new right stone. (The new numbers don't keep extra leading zeroes: 1000 would become stones 10 and 0.)
-            var digitCount = (int)Math.Floor(Math.Log10(stoneValue) + 1);
+            var digitCount = (int)Math.Floor(Math.Log10(stone.value) + 1);
 
             if (int.IsEvenInteger(digitCount))
             {
                 var modValue = (long)Math.Pow(10, digitCount / 2);
-                var leftPart = stoneValue / modValue;
-                var rightPart = stoneValue % modValue;
+                var leftPart = stone.value / modValue;
+                var rightPart = stone.value % modValue;
 
 
-                stoneList[stoneWriteIndex - 1] = leftPart;
-                stoneList[stoneWriteIndex] = rightPart;
+                stoneList[stoneWriteIndex - 1] = new Stone(leftPart, stone.occurence);
+                stoneList[stoneWriteIndex] = new Stone(rightPart, stone.occurence);
                 return 2;
             }
 
             //rule 3: If none of the other rules apply, the stone is replaced by a new stone; the old stone's number multiplied by 2024 is engraved on the new stone.        }
-            var newValue = stoneValue * 2024;
-            stoneList[stoneWriteIndex] = newValue; //bug 1: wrote 1024 instead of 2024 :-(
+            var newValue = stone.value * 2024;
+            stone.value = newValue; //bug 1: wrote 1024 instead of 2024 :-(
+            stoneList[stoneWriteIndex] = stone;
 
-            if (newValue > maxValue)
-            {
-                maxValue = newValue;
-            }
             return 1;
         }
     }
