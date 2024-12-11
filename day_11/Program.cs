@@ -3,7 +3,7 @@
 namespace day_11
 {
     // @0630 start 
-    // @0708 p1 coding finished
+    // @0720 p1 coding finished
     internal class Program
     {
         static void Main(string[] args)
@@ -47,11 +47,11 @@ namespace day_11
             }
 
             //rule 2: If the stone is engraved with a number that has an even number of digits, it is replaced by two stones. The left half of the digits are engraved on the new left stone, and the right half of the digits are engraved on the new right stone. (The new numbers don't keep extra leading zeroes: 1000 would become stones 10 and 0.)
-            var numDigits = GetNumberOfDigitsIn(stoneValue);
+            var digitCount = GetNumberOfDigitsIn(stoneValue);
 
-            if (int.IsEvenInteger(numDigits))
+            if (int.IsEvenInteger(digitCount))
             {
-                var modValue = (long)Math.Pow(10, numDigits / 2);
+                var modValue = (long)Math.Pow(10, digitCount / 2);
                 var leftPart = stoneValue / modValue;
                 var rightPart = stoneValue % modValue;
 
@@ -67,8 +67,25 @@ namespace day_11
 
         private static int GetNumberOfDigitsIn(long stoneValue)
         {
-            var numdigits = stoneValue.ToString().Length;
-            return numdigits;
+            //
+            //return stoneValue.ToString().Length;
+
+            //optimization 2: do not use .ToString()
+            //1100 --> 4  if < 1000 = 3
+            // 150 --> 3  if <  100 = 2
+            //  12 --> 2  if <   10 = 1
+
+            long compareValue = 10;
+            int digitcount = 1;
+            while (true) 
+            {  
+                if (stoneValue < compareValue)
+                {
+                    return digitcount;
+                }
+                compareValue *= 10;
+                digitcount++;
+            }
         }
     }
 }
