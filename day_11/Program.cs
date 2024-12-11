@@ -2,8 +2,12 @@
 
 namespace day_11
 {
+    // Advent of code 2024: https://adventofcode.com/2024/day/11
+    //
     // @0630 start 
     // @0720 p1 coding finished
+    // @0725 p1 ok
+    // @
     internal class Program
     {
         static void Main(string[] args)
@@ -15,7 +19,7 @@ namespace day_11
             for (var i = 0; i < 25; i++)
             {
                 Blink(stoneList);
-                Console.WriteLine($"Length after blink { i+1 } = { stoneList.Count }");
+                Console.WriteLine($"stones after blink { i+1 } = { stoneList.Count }");
             }
 
             Console.WriteLine($"Part 1: Number of stones: { stoneList.Count }");
@@ -24,10 +28,10 @@ namespace day_11
         private static void Blink(List<long> stoneList)
         {
             // optimization ideas: 
-            // 1) walk 1 time counting number of splits that will happen
-            // 2) then start at the end of the list walking back
-            // 3) determine number of digits math Log 10 math operation
-            // 4) determine new values by mod and div operations by Pow 10^(num_digits/2) -> no toString, subString and int.Parse ops
+            // 1) walk 1 time counting number of splits that will happen  
+            // 2) then start at the end of the list walking back, writing at the end of the NEW list
+            // 3) determine number of digits math Log 10 math operation : applied from start
+            // 4) determine new values by mod and div operations by Pow 10^(num_digits/2) -> no toString, subString and int.Parse ops : applied from start
 
             for (int i = stoneList.Count - 1; i >= 0; i--)
             {
@@ -61,7 +65,7 @@ namespace day_11
             }
 
             //rule 3: If none of the other rules apply, the stone is replaced by a new stone; the old stone's number multiplied by 2024 is engraved on the new stone.        }
-            stoneList[stoneIndex] = stoneValue * 1024;
+            stoneList[stoneIndex] = stoneValue * 2024; //bug 1: wrote 1024 instead of 2024 :-(
             return 1;
         }
 
