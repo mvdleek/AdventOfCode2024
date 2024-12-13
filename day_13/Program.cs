@@ -8,6 +8,8 @@
     // @2000 finished coding
     // @2006 p1 example ok
     // @2007 p1 31589
+    //       start on p2
+    // @2015 little break
 
     internal class Program
     {
@@ -93,6 +95,12 @@
                     var prize = new Prize();
                     prize.x = parts[1].ExtractNumber();
                     prize.y = parts[2].ExtractNumber();
+
+                    if (true)
+                    {
+                        prize.x += 10_000_000_000_000;
+                        prize.y += 10_000_000_000_000;
+                    }
 
                     machine.prize = prize; //bug 1 forgot this
                     clawMachines.Add(machine);
