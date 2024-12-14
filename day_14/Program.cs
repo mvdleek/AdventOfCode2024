@@ -1,7 +1,4 @@
-﻿
-
-
-namespace day_14
+﻿namespace day_14
 {
     // input 500 bots, field 101x103, after 100 seconds
     // p=0,4 v=3,-3  v=per second
@@ -12,7 +9,58 @@ namespace day_14
     // @1232 finished coding
     // @1247 p1 example ok = 12
     // @226548000
+
+    // @1830 - @2000 p2
+    // break
+    // @2200 p2 18156 --> difficult to find 100% sure, just looked for pics with >= 50 in bottom 3 rows
+    // @2215 p2 7753 ok
+    // 
+    // tough to find a way to detect a tree, what will be its shape? Is it solid or an outline?
+    // i decided to write the seconds states to files, so i could view them more easily than printed on the console
+    // (with preview it is easy to look at many files)
+    // 
+    // then i thought that the bottom line of the tree would contain many bots,
+    // somewhat lucky i said that in 3 consecutive lines there should be > 50 bots
+    // this still had many hits, but looking through them I stumbled upon 18156 -> it was not correct second, but it showed the outline
     //
+    // then i had better criteria to detect the tree, finding 7753
+
+                                                                                                         
+//      *                                   *******************************                            
+//                                          *                             *                            
+//                                          *                             *                            
+//                                    *     *                             *                            
+//                                          *                             *                            
+//                             *            *              *              *                            
+//                                          *             ***             *                            
+//*   *                                     *            *****            *                            
+//                      *                   *           *******           *                            
+//                                          *          *********          *                            
+//                   *                      *            *****            *                 *  *       
+//                                          *           *******           *                            
+//                            *             *          *********          *                  *        *
+//                                          *         ***********         *          *                 
+//                                          *        *************        *              *             
+//                                          *          *********          *                            
+//                                          *         ***********         *                            
+//          *                               *        *************        *                            
+// *                   *      *       *     *       ***************       *                            
+//                                          *      *****************      *                            
+//                                 *        *        *************        *                            
+//       *                                  *       ***************       *              *             
+//                        *                 *      *****************      *                          * 
+//                                *         *     *******************     *                            
+//                     *                    *    *********************    *                            
+//                    *                     *             ***             *                            
+//                                  *       *             ***             *                            
+//                                      *   *             ***             *                            
+//                            *             *                             *          *                 
+//                                 *        *                             *                           *
+//                                        * *                             *            *               
+//                                          *                             *            *               
+//      *                  * *              *******************************                    *       
+                                                                                                     
+
 
     internal class Program
     {
@@ -23,6 +71,10 @@ namespace day_14
 
             var botCollection = BotCollection.ReadInput(filename);
             botCollection.SolvePart1(101, 103);
+            botCollection.SolvePart1(101, 103);
+
+            var botCollection2 = BotCollection.ReadInput(filename);
+            botCollection2.SolvePart2(101, 103);
         }
     }
 
@@ -108,6 +160,120 @@ namespace day_14
                 CountBotsInQuadrant(width - quadrantWidth, height - quadrantHeight, quadrantWidth, quadrantHeight);
 
             Console.WriteLine($"Part1: Safety factor = {safetyFactor}");
+        }
+
+        internal void SolvePart2(int width, int height)
+        {
+            if (!Directory.Exists(".\\output"))
+            {
+                Directory.CreateDirectory(".\\output");
+            }
+            for (int i = 0; i < 20_000; i++)
+            {
+                if (i % 1000 == 0)
+                {
+                    Console.WriteLine($"At seconds: {i + 1}");
+                }
+
+                MoveBots(width, height);
+
+                if (DetectTree(height))
+                {
+                    Console.WriteLine($"Possible tree detected: {i + 1} seconds");
+                    Print(i + 1, width, height);
+                }
+            }
+        }
+
+        private bool DetectTree(int height)
+        {
+            // detect large number of bots in 3 consective rows >= 50, still many hits many to find by hand 18154 from many files
+            // used tree found with 18154 to set better search criterua (>= 95 in 5 rows between row 60 and 100, still many hits but found 7753
+
+            // with 18154 these criteria would be best:
+            // in 10 consequetive rows, detect 150 bots with x between 30 and 90  <---- this only finds 7753 and 18156
+            //                                          *          *********       9   bots  *                            
+            //                                          *         ***********      11  bots *                            
+            //          *                               *        *************     13  bots *                            
+            // *                   *      *       *     *       ***************    15  bots *                            
+            //                                          *      *****************   17  bots *                            
+            //                                 *        *        *************     13  bots *                            
+            //       *                                  *       ***************    15  bots *              *             
+            //                        *                 *      *****************   17  bots *                          * 
+            //                                *         *     *******************  19  bots *                            
+            //                     *                    *    ********************* 21  bots *                            
+
+
+
+
+
+
+
+
+
+
+
+            int[] counts = new int[height];
+
+            foreach (var b in bots)
+            {
+                if (b.y >= 0 && b.y < height)
+                {
+                    if (b.x >= 30 && b.x <= 90)
+                    {
+                        counts[b.y] += 1;
+                    }
+                }
+            }
+            var conseq = 10;
+            var minSumForPossibleTree = 150;
+
+            for (int i = (conseq /2)+1; i <= height - conseq; i++)
+            {
+                var sum = 0;
+                for (int z = 0; z < conseq; z++)
+                {
+                    sum += counts[i+z];
+                }
+                if (sum >= minSumForPossibleTree)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void Print(int seconds, int width, int height)
+        {
+            var lines = new List<string>();
+            lines.Add($"After {seconds} seconds:");
+
+            var row = new char[width];
+
+            var botsPerY = bots.GroupBy(b => b.y).ToList();
+            var d = new Dictionary<int, List<Bot>>();
+            foreach (var b in botsPerY)
+            {
+                d.Add(b.Key, b.ToList());
+;           }
+
+            for (int i = 0; i < height; i++)
+            {
+                Array.Fill(row, ' ');
+                if (d.ContainsKey(i))
+                {
+                    foreach (var b in d[i])
+                    {
+                        row[b.x] = '*';
+                    }
+                }
+                var s = new string(row);
+                lines.Add(s);
+            }
+
+            // write to file to enable manual inspection
+            File.WriteAllLines($".\\output\\After {seconds.ToString().PadLeft(7, '0')}.txt", lines);
         }
 
         private int CountBotsInQuadrant(int x, int y, int qWidth, int qHeight)
