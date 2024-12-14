@@ -24,6 +24,9 @@
     // this still had many hits, but looking through them I stumbled upon 18156 -> it was not correct second, but it showed the outline
     //
     // then i had better criteria to detect the tree, finding 7753
+    //
+    // part 1 was easy
+    // part 2 not easy, had to manual work to find solution
 
                                                                                                          
 //      *                                   *******************************                            
