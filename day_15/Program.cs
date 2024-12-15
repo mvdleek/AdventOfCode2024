@@ -14,6 +14,12 @@
     // p2 example ok
     // @1256 p2 1468005 ok : 0 bugs, first time right !!
 
+    // Day 15:
+    // This was more tedious than difficult. Yet another easily solvable grid puzzle.
+    // Only highlight was making 0 bugs, or rather,
+    // finding all the bugs during code writing (by just reading the code catching the tiny mistakes)
+    //
+
     internal class Program
     {
         static void Main(string[] args)
