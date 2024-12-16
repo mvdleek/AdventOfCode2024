@@ -70,10 +70,10 @@
         static void Main(string[] args)
         {
             //var filename = "input_example.txt"; // 11x7
-            var filename = "input.txt"; // 101X103
+            var filename = "input"; // 101X103
+            //var filename = "input - Copy.txt"; // 8168
 
             var botCollection = BotCollection.ReadInput(filename);
-            botCollection.SolvePart1(101, 103);
             botCollection.SolvePart1(101, 103);
 
             var botCollection2 = BotCollection.ReadInput(filename);
@@ -222,7 +222,7 @@
             {
                 if (b.y >= 0 && b.y < height)
                 {
-                    if (b.x >= 30 && b.x <= 90)
+                    if (b.x >= 0 && b.x <= 102)
                     {
                         counts[b.y] += 1;
                     }
