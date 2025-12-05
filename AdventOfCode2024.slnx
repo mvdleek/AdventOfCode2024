@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="aoc25_day_01/aoc25_day_01.csproj" />
+  <Project Path="aoc25_day_02/aoc25_day_02.csproj" Id="ff2d7cd6-6eda-4aba-bb87-bbe865eed03d" />
+  <Project Path="aoc25_day_03/aoc25_day_03.csproj" Id="6e81c1f5-7592-405b-9281-d2ee325774a2" />
+  <Project Path="aoc25_day_04/aoc25_day_04.csproj" Id="f840cce6-0841-41b8-a1f7-c5cd595128ad" />
+  <Project Path="aoc25_day_05/aoc25_day_05.csproj" Id="d15276e0-7606-4704-b4c0-da85e91beaa0" />
+</Solution>
