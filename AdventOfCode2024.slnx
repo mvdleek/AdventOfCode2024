@@ -6,4 +6,5 @@
   <Project Path="aoc25_day_05/aoc25_day_05.csproj" Id="d15276e0-7606-4704-b4c0-da85e91beaa0" />
   <Project Path="aoc25_day_06/aoc25_day_06.csproj" />
   <Project Path="aoc25_day_07/aoc25_day_07.csproj" Id="508ea2c9-8d8d-4034-8027-16d3a275b42b" />
+  <Project Path="aoc25_day_08/aoc25_day_08.csproj" Id="ad3354e9-1a8f-4d67-8eb5-497bb27a49a5" />
 </Solution>
