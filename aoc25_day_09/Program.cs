@@ -58,7 +58,7 @@ namespace aoc25_day_09
             Console.WriteLine($"count = {count} (={/*495+494+..+ 1*/ (496 * 494 / 2) + 496 / 2})");
             Console.WriteLine($"maxarea = {maxArea}");
 
-            Console.WriteLine("solved p2");
+            Console.WriteLine("solved p2");  // after ~5/6 hours: 1534043700 and it was correct!!!!!
         }
 
         private static void Solve(List<Tile> tiles)
