@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            // voor P2: zie https://www.reddit.com/r/adventofcode/comments/1pk87hl/2025_day_10_part_2_bifurcate_your_way_to_victory/
             var input = ReadInput("input.txt");
 
             //SolveP1(input); //411

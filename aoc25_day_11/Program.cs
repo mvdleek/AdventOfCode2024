@@ -1,12 +1,5 @@
-﻿
-
-
-
-
-
-namespace aoc25_day_11
+﻿namespace aoc25_day_11
 {
-
     internal class Program
     {
         static string fname = "input.txt";
@@ -28,7 +21,7 @@ namespace aoc25_day_11
             MarkBackwardReachabilityFrom("out", "dac", nodegraph);
             MarkVisitableNodesFrom("dac", nodegraph);
             RemoveUnvisitableNodes(nodegraph);
-            var x3 = FindForwardpathsViaReachabilityFromTo("dac", "out", nodegraph, "all paths from dac to out (no fft)"); //
+            var x3 = FindForwardpathsViaReachabilityFromTo("dac", "out", nodegraph, "all paths from dac to out (no fft)"); //3.289.211.270.563.764
 
             var allPathsFromSvrToOutThroughDacNotThroughFft = x2 * x3;
             Console.WriteLine($"Paths from svr to out through dac, not through fft = {allPathsFromSvrToOutThroughDacNotThroughFft}");
@@ -39,7 +32,7 @@ namespace aoc25_day_11
             MarkBackwardReachabilityFrom("out", "fft", nodegraph);
             MarkVisitableNodesFrom("fft", nodegraph);
             RemoveUnvisitableNodes(nodegraph);
-            var y3 = FindForwardpathsViaReachabilityFromTo("fft", "out", nodegraph, "all paths from fft to out (no dac)"); //
+            var y3 = FindForwardpathsViaReachabilityFromTo("fft", "out", nodegraph, "all paths from fft to out (no dac)"); //8.948.669.094.917.292
 
             var allPathsFromSvrToOutThroughFftNoyThroughDac = y2 * y3;
             Console.WriteLine($"Paths from svr to out through fft, not through dac = {allPathsFromSvrToOutThroughFftNoyThroughDac}");
@@ -48,7 +41,7 @@ namespace aoc25_day_11
             nodegraph.RemoveNode("fft");
             nodegraph.RemoveNode("dac");
 
-            var allPathsWithoutFftAndDac = FindForwardpathsFromTo("svr", "out", nodegraph, "all paths without fft and dac"); //82088924239817579
+            var allPathsWithoutFftAndDac = FindForwardpathsFromTo("svr", "out", nodegraph, "all paths without fft and dac"); //82.088.924.239.817.579
 
             var result = allFromSvrPathsToOut 
                 - allPathsFromSvrToOutThroughDacNotThroughFft 

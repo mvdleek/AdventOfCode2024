@@ -10,5 +10,6 @@
   <Project Path="aoc25_day_09/aoc25_day_09.csproj" Id="01841105-da38-4cf1-877b-212f0827290c" />
   <Project Path="aoc25_day_10/aoc25_day_10.csproj" Id="e4cbaf6f-9eb1-4382-aa89-da6b6746d574" />
   <Project Path="aoc25_day_11/aoc25_day_11.csproj" Id="6ee148a5-818f-4f7d-b9f6-1594dcdc394a" />
+  <Project Path="aoc25_day_12/aoc25_day_12.csproj" Id="f2f32286-110c-4688-897d-97ce29161610" />
   <Project Path="TestProject1/TestProject1.csproj" Id="e820660d-146f-4b00-a5ab-ea41b777f5c6" />
 </Solution>
