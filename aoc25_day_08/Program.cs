@@ -139,7 +139,6 @@ namespace aoc25_day_08
             }
 
             Console.WriteLine($"result = {result}");
-
         }
 
         private static void printCircuits(List<Circuit> circuits)

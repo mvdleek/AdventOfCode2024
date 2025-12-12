@@ -1,9 +1,7 @@
-﻿
-namespace aoc25_day_02
+﻿namespace aoc25_day_02
 {
     internal class Program
     {
-
         class IDRange
         {
             public long first;
@@ -16,6 +14,7 @@ namespace aoc25_day_02
                 last = long.Parse(parts[1]);
             }
         }
+
         static void Main(string[] args)
         {
             var input = File.ReadAllLines("input.txt")[0].Split(',').Select(x => new IDRange(x)).ToArray();  // p1=200446, p2: 238317474993392
